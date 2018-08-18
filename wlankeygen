@@ -1,0 +1,17 @@
+#!/bin/bash
+WLANPSK=$(dd if=/dev/urandom count=1 status=none|tr -d -c 'a-z'|cut -b1-10)
+sed -ie "s/wpa_passphrase=.*/wpa_passphrase=${WLANPSK}/" /etc/hostapd/hostapd.conf
+service hostapd reload
+
+# HTML-Dokument aktualisieren
+sed -ie "s/KEY: .*/KEY: ${WLANPSK}/" wlan-butler.htm
+NOW=$(date +"%m.%d.%Y - %T")
+sed -ie "s/nderung: .*/nderung: ${NOW}/" wlan-butler.htm
+
+# QR-Codes aktualisieren
+qrencode -t PNG -o - -s 4 "WIFI:T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_android.png
+qrencode -t PNG -o - -s 4 "WIFI;T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_windows.png
+	
+# iOS-Zertifikat bauen und bereitstellen
+#sed -e "s/<string>wlanpsk/<string>${WLANPSK}/" /var/www/html/gaestewlan.mobileconfig.in > /var/www/html/${WLANPSK}.mobileconfig
+#qrencode -t PNG -o - -s 4 "http://my.example.com/${WLANPSK}.mobileconfig" | convert - qr_ios.jpg
