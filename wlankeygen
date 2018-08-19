@@ -2,28 +2,30 @@
 
 cd  /home/pi/myScripts/guestwlan/
 
+# Neuen Key erzeugen
+echo Neuen WLAN-Key erzeugen...
 WLANPSK=$(dd if=/dev/urandom count=1 status=none|tr -d -c 'a-z'|cut -b1-10)
 sed -ie "s/wpa_passphrase=.*/wpa_passphrase=${WLANPSK}/" /etc/hostapd/hostapd.conf
 service hostapd reload
 
 # HTML-Dokument aktualisieren
+echo HTML-Dokument aktualisieren...
 sed -ie "s/KEY: .*/KEY: ${WLANPSK}/" wlan-butler.htm
-NOW=$(date +"%m.%d.%Y - %T")
+NOW=$(date +"%d.%m.%Y - %T")
 sed -ie "s/nderung: .*/nderung: ${NOW}/" wlan-butler.htm
 
 # QR-Codes aktualisieren
+echo QR-Codes aktualisieren...
 qrencode -t PNG -o - -s 4 "WIFI:T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_android.png
 qrencode -t PNG -o - -s 4 "WIFI;T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_windows.png
+qrencode -t PNG -o - -s 4 "https://raw.githubusercontent.com/haegelix/guestwlan/master/gaestewlan.mobileconfig" > qr_ios.png
 	
 # iOS-Zertifikat bauen und bereitstellen
+echo iOS-Zertifikat bauen und bereitstellen...
 sed -e "s/<string>wlanpsk/<string>${WLANPSK}/" gaestewlan.mobileconfig.in > gaestewlan.mobileconfig
-qrencode -t PNG -o - -s 4 "https://raw.githubusercontent.com/haegelix/guestwlan/master/gaestewlan.mobileconfig" > qr_ios.jpg
-
 
 # Upload Profile to github
-sudo su pi
-cd  /home/pi/myScripts/guestwlan/
+echo ...Zu User pi wechseln...
+sudo su pi -c "/home/pi/myScripts/guestwlan/githubuploader"
 
-git add gaestewlan.mobileconfig
-git commit -m "Auto-Commit by wlankeygen"
-git push
+exit
