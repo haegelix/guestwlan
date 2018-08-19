@@ -1,8 +1,0 @@
-#!/bin/bash
-cd  /home/pi/myScripts/guestwlan/
-
-echo ...github-Upload durchfuehren...
-git add gaestewlan.mobileconfig
-git commit -m "Auto-Commit by wlankeygen"
-git push
-exit
