@@ -17,12 +17,13 @@ qrencode -t PNG -o - -s 4 "WIFI;T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_
 	
 # iOS-Zertifikat bauen und bereitstellen
 sed -e "s/<string>wlanpsk/<string>${WLANPSK}/" gaestewlan.mobileconfig.in > gaestewlan.mobileconfig
-#qrencode -t PNG -o - -s 4 "https://raw.githubusercontent.com/haegelix/guestwlan/master/gaestewlan.mobileconfig" > qr_ios.jpg
+qrencode -t PNG -o - -s 4 "https://raw.githubusercontent.com/haegelix/guestwlan/master/gaestewlan.mobileconfig" > qr_ios.jpg
 
 
 # Upload Profile to github
 sudo su pi
 cd  /home/pi/myScripts/guestwlan/
 
+git add gaestewlan.mobileconfig
 git commit -m "Auto-Commit by wlankeygen"
 git push

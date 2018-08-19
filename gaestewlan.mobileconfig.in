@@ -24,7 +24,7 @@
 </dict>
 </array>
 <key>PayloadDescription</key>
-<string>Profil, um sich automatisch mit dem WLAN WLAN-Butler zu verbinden.</string>
+<string>Profil, um sich automatisch mit dem WLAN-Butler zu verbinden.</string>
 <key>PayloadDisplayName</key>
 <string>WLAN: WLAN-Butler</string>
 <key>PayloadIdentifier</key>
@@ -34,7 +34,7 @@
 <key>PayloadType</key>
 <string>Configuration</string>
 <key>PayloadUUID</key>
-<string>heise-wlan</string>
+<string>WLAN-Butler</string>
 <key>PayloadVersion</key>
 <integer>1</integer>
 </dict>
