@@ -16,5 +16,13 @@ qrencode -t PNG -o - -s 4 "WIFI:T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_
 qrencode -t PNG -o - -s 4 "WIFI;T:WPA;S:WLAN-Butler;P:${WLANPSK};H:false;" > qr_windows.png
 	
 # iOS-Zertifikat bauen und bereitstellen
-#sed -e "s/<string>wlanpsk/<string>${WLANPSK}/" /var/www/html/gaestewlan.mobileconfig.in > /var/www/html/${WLANPSK}.mobileconfig
-#qrencode -t PNG -o - -s 4 "http://my.example.com/${WLANPSK}.mobileconfig" | convert - qr_ios.jpg
+sed -e "s/<string>wlanpsk/<string>${WLANPSK}/" gaestewlan.mobileconfig.in > gaestewlan.mobileconfig
+#qrencode -t PNG -o - -s 4 "https://raw.githubusercontent.com/haegelix/guestwlan/master/gaestewlan.mobileconfig" > qr_ios.jpg
+
+
+# Upload Profile to github
+sudo su pi
+cd  /home/pi/myScripts/guestwlan/
+
+git commit -m "Auto-Commit by wlankeygen"
+git push
